@@ -13,7 +13,9 @@ How much did the ICLR 2027 rebuttal move review scores? Every paper's ratings on
 
 - `index.html`: the whole site. Static, no build step, works on GitHub Pages.
 - `data.js`: aggregated counts only.
-- `tools/collect.js`: the browser-console script that rebuilds the numbers in `data.js`.
+- `tools/collect.js`: runs in a signed-in OpenReview tab and pulls the current ratings (steps in the file).
+- `tools/build_data.js`: appends one pass to `data.js`, and refuses if the totals do not add up.
+- `tools/to_bymean.js`, `tools/og_card.py`: rebuild the link-preview card.
 - `assets/`: favicon and link-preview card.
 
 ## Data
