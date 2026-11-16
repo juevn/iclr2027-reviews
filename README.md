@@ -33,14 +33,14 @@ How much did the ICLR 2027 rebuttal move review scores? Every paper's initial re
 | 6 | Ratings changed but the sum stayed the same |
 | 7 | Total change in rating sums |
 
-`currentMeans` counts papers still under review by their current mean rating, so a score can be ranked against today's field. `reviews` holds review-level moves (`"2>3"`: reviews that were initially 2 and are 3 now). `timeline` has one row per update.
+`currentMeans` counts papers still under review by their current mean rating, so a score can be ranked against today's field. `reviews` holds review-level moves (`"2>3"`: reviews that were initially 2 and are 3 now). `dest` lists, for each initial combination, the current scores of the papers that changed. `moveTimes` counts changed reviews per move by 3-hour UTC bucket of the review's last edit. `timeline` has one row per update.
 
 ## How it was made
 
 - **Initial scores.** The snapshot taken right after reviews were released (Nov 6, 13:54 UTC), published at [shiqiangw.github.io/iclr-2027-scores](https://shiqiangw.github.io/iclr-2027-scores/) ([repo](https://github.com/shiqiangw/iclr-2027-scores)), about a day after reviews were released.
 - **Current ratings.** The OpenReview API: every ICLR 2027 submission with its official reviews.
 - **Score changes.** A paper's scores now against its initial scores. Only papers still under review with the same number of reviews are counted.
-- **Review-level moves.** Reviews not edited since the snapshot keep their initial rating, which pins down the rest. When several reviews on one paper were edited and more than one pairing fits, edits that kept the rating count as text-only and the rest are paired by smallest change. This applies to 242 of 3,748 changed reviews (6%, as of Nov 16); the other 94% are pinned down exactly.
+- **Review-level moves.** Reviews not edited since the snapshot keep their initial rating, which pins down the rest. When several reviews on one paper were edited and more than one pairing fits, edits that kept the rating count as text-only and the rest are paired by smallest change. This applies to 258 of 3,900 changed reviews (7%, as of Nov 17); the rest are pinned down exactly.
 - **Privacy.** Only counts are published. No review text, reviewer ids, paper titles or author names.
 
 Made by [Jueun Kim](https://juevn.github.io/) ([@jueun_kim_](https://x.com/jueun_kim_)). Also: [NeurIPS 2026 Explorer](https://juevn.github.io/neurips2026/).

@@ -107,6 +107,15 @@ p.ss { color: var(--muted); margin: 0 0 16px; font-size: 16px; max-width: 720px;
 .compare { margin-top: 16px; font-size: 15px; color: var(--muted); line-height: 1.6; }
 .compare b { color: var(--ink); }
 .note { margin-top: 10px; font-size: 13.5px; color: var(--faint); }
+.dest { margin-top: 20px; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px 12px; }
+.dest .dh { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.dest .ds { font-size: 13.5px; color: var(--muted); margin-bottom: 10px; }
+.drow { display: grid; grid-template-columns: minmax(84px, auto) 1fr 64px 52px; gap: 12px; align-items: center; padding: 5px 0; font-variant-numeric: tabular-nums; }
+.drow .dk { font-weight: 700; letter-spacing: 2px; white-space: nowrap; }
+.drow .db { height: 10px; border-radius: 5px; background: var(--panel); overflow: hidden; }
+.drow .db i { display: block; height: 100%; border-radius: 0 4px 4px 0; }
+.drow .dn { text-align: right; font-weight: 600; }
+.drow .dm { text-align: right; color: var(--muted); font-size: 13.5px; }
 
 /* charts */
 .chartcard { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 20px 20px 12px; position: relative; }
@@ -140,6 +149,8 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
   .lookup { padding: 16px; border-radius: 20px; }
   .chartcard { padding: 16px 14px 10px; border-radius: 20px; }
   .inrow .btn { width: 100%; }
+  .drow { grid-template-columns: auto 1fr 44px 44px; gap: 8px; }
+  .drow .dk { letter-spacing: 1px; }
   .nav a.hide-s { display: none; }
   .brand .x { display: none; }
 }
@@ -328,7 +339,20 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
       <div class="compare">Up, down and same are shares of the ${fmt(c.sc)} papers still under review with ${r.length} reviews. Withdrawn is a share of all ${fmt(c.n)}.
         ${key.length && same.sc > c.sc ? `<br>All papers with mean <b>${mean.toFixed(2)}</b>, any combination: <b>${pct(same.up, same.sc)}</b> up, <b>${pct(same.down, same.sc)}</b> down.` : ''}</div>
       ${c.sc < 30 ? '<div class="note">Few papers started like this, so these shares are noisy.</div>' : ''}
-      ${other > 0 ? `<div class="note">${fmt(other)} more gained or lost a review and are not counted in up/down.</div>` : ''}`;
+      ${other > 0 ? `<div class="note">${fmt(other)} more gained or lost a review and are not counted in up/down.</div>` : ''}
+      ${destHtml(key, mean)}`;
+  }
+  // where the papers that changed ended up
+  function destHtml(key, mean) {
+    const d = D.dest && D.dest[key]; if (!d) return '';
+    const ent = Object.entries(d).sort((a, b) => b[1] - a[1]);
+    const moved = ent.reduce((a, [, n]) => a + n, 0), top = ent.slice(0, 5), rest = moved - top.reduce((a, [, n]) => a + n, 0);
+    const rows = top.map(([k, n]) => {
+      const r = k.split('').map(Number), dm = (r.reduce((a, b) => a + b, 0) - key.split('').reduce((a, b) => a + +b, 0)) / r.length;
+      const col = dm > 0.001 ? 'var(--up)' : dm < -0.001 ? 'var(--down)' : 'var(--same)';
+      return `<div class="drow"><span class="dk">${r.join(' ')}</span><span class="db"><i style="width:${Math.max(3, 100 * n / top[0][1])}%;background:${col}"></i></span><span class="dn">${fmt(n)}</span><span class="dm">${dm > 0.001 ? '+' : ''}${Math.abs(dm) < 0.001 ? '±0' : dm.toFixed(2)}</span></div>`;
+    }).join('');
+    return `<div class="dest"><div class="dh">Where they went</div><div class="ds">Current scores of the ${fmt(moved)} paper${moved === 1 ? '' : 's'} that changed, with the change in mean.</div>${rows}${rest ? `<div class="note">${fmt(rest)} more in ${ent.length - 5} other combination${ent.length - 5 === 1 ? '' : 's'}.</div>` : ''}</div>`;
   }
   $('form').addEventListener('submit', (e) => { e.preventDefault(); const k = parse($('q').value); show(k); if (k) history.replaceState(null, '', '#' + k); });
   const fromHash = location.hash.replace('#', ''); if (/^[1-4]{1,7}$/.test(fromHash)) { const k = fromHash.split('').sort((a, b) => b - a).join(''); $('q').value = k.split('').join(' '); show(k); }
