@@ -16,7 +16,7 @@ ax.text(72, 545, "ICLR 2027 · REBUTTAL TRACKER", fontsize=17, weight="bold", co
 ax.text(70, 470, "How much did the rebuttal", fontsize=54, weight="bold", color="#111827")
 ax.text(70, 395, "move scores?", fontsize=54, weight="bold", color="#111827")
 ax.text(72, 335, "Look up your initial ratings and see how papers like yours moved.", fontsize=20, color="#6b7280")
-stats = [(f"{100*moved/t['sc']:.1f}%", "of papers changed score"), (f"{round(t['up']/max(1,t['down']))} : 1", "went up vs. down"), (f"{100*t['withdrawn']/t['n']:.1f}%", "withdrawn since Nov 6")]
+stats = [(f"{100*moved/t['sc']:.1f}%", "of papers changed score"), (f"{round(t['up']/max(1,t['down']))} : 1", "went up vs. down"), (f"{100*t['withdrawn']/t['n']:.1f}%", "withdrawn so far")]
 for i, (b, s) in enumerate(stats):
     x0 = 72 + i * 355
     ax.add_patch(FancyBboxPatch((x0, 95), 340, 160, boxstyle="round,pad=0,rounding_size=22", fc="#f5f6f8", ec="#e5e7eb", lw=1.5))

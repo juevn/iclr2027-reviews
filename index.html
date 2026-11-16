@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How much did the ICLR 2027 rebuttal move scores?</title>
-<meta name="description" content="How much did the ICLR 2027 rebuttal move review scores? Initial ratings from Nov 6 against live OpenReview data for about 40,000 papers.">
+<meta name="description" content="How much did the ICLR 2027 rebuttal move review scores? Initial review scores against live OpenReview data for about 40,000 papers.">
 <meta property="og:title" content="How much did the ICLR 2027 rebuttal move scores?">
 <meta property="og:description" content="How much did the rebuttal move scores? Look up your initial ratings and see how papers like yours moved.">
 <meta property="og:type" content="website">
@@ -160,18 +160,18 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
   <div class="hero">
     <div class="kick">ICLR 2027 · Rebuttal tracker</div>
     <h1 class="title">How much did the rebuttal move scores?</h1>
-    <p>Every paper's ratings on Nov 6, when reviews came out, against live OpenReview data.</p>
+    <p>Every paper's initial review scores against live OpenReview data.</p>
     <div class="live"><i></i><span id="updated"></span></div>
   </div>
 
   <div class="stats" id="stats"></div>
 
   <section id="lookup">
-    <h2 class="st">Look up your score</h2>
-    <p class="ss">Type the ratings your paper got on Nov 6, in any order. See how papers that started the same way have moved so far.</p>
+    <h2 class="st">Look up your initial score</h2>
+    <p class="ss">Type your paper's initial scores, in any order. See how papers that started the same way have moved so far.</p>
     <div class="lookup">
       <form class="inrow" id="form" autocomplete="off">
-        <input id="q" inputmode="numeric" placeholder="e.g. 3 3 2 2" aria-label="Initial ratings, 1 to 4 each">
+        <input id="q" inputmode="numeric" placeholder="Initial scores, e.g. 3 3 2 2" aria-label="Initial scores, 1 to 4 each">
         <button class="btn" type="submit">Look up</button>
       </form>
       <div class="hint" id="chips"><span>Try:</span></div>
@@ -184,15 +184,15 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
     <p class="ss">Higher starting scores moved up more often. Papers near the bottom mostly withdrew instead.</p>
     <div class="chartcard">
       <h4>Share of papers whose score went up or down</h4>
-      <p class="cap">Papers still under review with the same number of reviews as on Nov 6. Means with fewer than 100 papers are not shown.</p>
+      <p class="cap">Papers still under review with the same number of reviews as initially. Means with fewer than 100 papers are not shown.</p>
       <div class="legend"><span><i style="background:var(--up)"></i>Went up</span><span><i style="background:var(--down)"></i>Went down</span><span>Gray labels: mostly 4-review papers</span></div>
       <svg class="chart" id="c-move" role="img" aria-label="Share of papers whose score went up or down, by initial mean"></svg>
       <div class="tip" id="tip-move"></div>
     </div>
     <div class="chartcard">
-      <h4>Share of papers withdrawn since Nov 6</h4>
-      <p class="cap">All papers that had ratings on Nov 6.</p>
-      <svg class="chart" id="c-wd" role="img" aria-label="Share of papers withdrawn since Nov 6, by initial mean"></svg>
+      <h4>Share of papers withdrawn so far</h4>
+      <p class="cap">All papers that had initial scores.</p>
+      <svg class="chart" id="c-wd" role="img" aria-label="Share of papers withdrawn so far, by initial mean"></svg>
       <div class="tip" id="tip-wd"></div>
     </div>
   </section>
@@ -201,9 +201,9 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
     <h2 class="st">Review by review</h2>
     <p class="ss" id="rev-sub"></p>
     <div class="chartcard">
-      <h4>Each review's rating on Nov 6 → now</h4>
+      <h4>Each review's initial rating → now</h4>
       <p class="cap">Counts of reviews. Off-diagonal cells are changes; the diagonal is reviews that kept their rating.</p>
-      <svg class="chart" id="c-heat" role="img" aria-label="Review rating transitions from Nov 6 to now"></svg>
+      <svg class="chart" id="c-heat" role="img" aria-label="Review rating transitions from initial to now"></svg>
       <div class="tip" id="tip-heat"></div>
     </div>
   </section>
@@ -219,7 +219,7 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
   <section id="method">
     <h2 class="st">Data</h2>
     <ul class="method">
-      <li><b>Nov 6 ratings</b> come from the snapshot by <a id="base-link" href="#">shiqiangw</a> (13:54 UTC). <b>Current ratings</b> come from the OpenReview API.</li>
+      <li><b>Initial scores</b> come from the snapshot by <a id="base-link" href="#">shiqiangw</a>, taken right after reviews were released. <b>Current scores</b> come from the OpenReview API.</li>
       <li><b>Score changes</b> count only papers still under review with the same number of reviews.</li>
       <li><b>Review-level moves</b> are matched by edit time; <span id="inferred"></span> are inferred.</li>
       <li>Only counts are published: no review text, reviewer ids or paper titles.</li>
@@ -287,7 +287,7 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
     const same = add(combos.filter(x => x.mean === mean));
     const above = means.filter(([m]) => m >= mean).reduce((a, [, n]) => a + n, 0);
     const label = r.join(' · ');
-    // rank of this mean among all papers on Nov 6, and among papers still under review now
+    // rank of this mean among all papers initially, and among papers still under review now
     const rankIn = (pairs, total) => {
       const higher = pairs.filter(([m]) => m > mean + 1e-9).reduce((a, [, n]) => a + n, 0);
       const tied = pairs.filter(([m]) => Math.abs(m - mean) < 1e-9).reduce((a, [, n]) => a + n, 0);
@@ -299,13 +299,13 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
     const rn = rankIn(nowPairs, D.currentMeans.n);
     const rankHtml = `
       <div class="metrics ranks">
-        <div class="metric rank"><div class="lbl">Rank on Nov 6</div><div class="rk"><b>Top ${r6.top}%</b><span class="num">#${fmt(r6.rank)} <small>of ${fmt(r6.total)}</small></span></div><span>${r6.tied > 1 ? `tied with ${fmt(r6.tied - 1)} others` : '&nbsp;'}</span></div>
+        <div class="metric rank"><div class="lbl">Initial rank</div><div class="rk"><b>Top ${r6.top}%</b><span class="num">#${fmt(r6.rank)} <small>of ${fmt(r6.total)}</small></span></div><span>${r6.tied > 1 ? `tied with ${fmt(r6.tied - 1)} others` : '&nbsp;'}</span></div>
         <div class="rk-arrow" aria-hidden="true">→</div>
         <div class="metric rank${+rn.top > +r6.top ? ' now' : ''}"><div class="lbl">Same mean, ranked now</div><div class="rk"><b>Top ${rn.top}%</b><span class="num">#${fmt(rn.rank)} <small>of ${fmt(rn.total)}</small></span></div><span>${rn.tied > 1 ? `tied with ${fmt(rn.tied - 1)} others` : '&nbsp;'}</span></div>
       </div>
       ${+rn.top > +r6.top ? `<div class="note">If your scores haven't changed, the same mean now ranks lower: other papers went up while the bottom withdrew.</div>` : ''}`;
     if (!c || !c.n) {
-      box.innerHTML = `<h3>${label} <span style="color:var(--muted);font-weight:500">· mean ${mean.toFixed(2)}</span></h3><div class="sub">No paper had exactly these ratings on Nov 6.</div>` + rankHtml +
+      box.innerHTML = `<h3>${label} <span style="color:var(--muted);font-weight:500">· mean ${mean.toFixed(2)}</span></h3><div class="sub">No paper had exactly these initial scores.</div>` + rankHtml +
         (same.sc ? `<div class="compare">Across all papers with mean <b>${mean.toFixed(2)}</b>: <b>${pct(same.up, same.sc)}</b> went up, <b>${pct(same.down, same.sc)}</b> went down.</div>` : '');
       return;
     }
@@ -447,7 +447,7 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
     const tp = tipper(svg, $('tip-heat'));
     const maxOff = Math.max(...Object.values(moves));
     svg.appendChild(el('text', { x: ox + gridW / 2, y: 18, 'text-anchor': 'middle', 'font-size': 13, fill: css('--muted') }, 'Rating now →'));
-    svg.appendChild(el('text', { x: ox - 12, y: Tp - 10, 'text-anchor': 'end', 'font-size': 13, fill: css('--muted') }, 'Nov 6 ↓'));
+    svg.appendChild(el('text', { x: ox - 12, y: Tp - 10, 'text-anchor': 'end', 'font-size': 13, fill: css('--muted') }, 'Initial ↓'));
     for (let j = 1; j <= 4; j++) svg.appendChild(el('text', { x: ox + (j - 1) * (cell + gap) + cell / 2, y: Tp - 10, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 700, fill: css('--ink') }, j));
     for (let i = 1; i <= 4; i++) {
       const yy = Tp + (i - 1) * (cell + gap);
@@ -482,7 +482,7 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
   // ---- timeline
   const rows = D.timeline.map((t, i) => {
     const mv = t.up + t.down + t.mixed;
-    return `<tr><td>${when(t.at)}${i === 0 ? ' <span style="color:var(--faint)">(baseline)</span>' : ''}</td><td>${i ? pct(mv, t.sc) : '–'}</td><td>${i ? fmt(t.up) : '–'}</td><td>${i ? fmt(t.down) : '–'}</td><td>${i ? fmt(t.withdrawn) : '–'}</td></tr>`;
+    return `<tr><td>${i === 0 ? 'Initial scores' : when(t.at)}</td><td>${i ? pct(mv, t.sc) : '–'}</td><td>${i ? fmt(t.up) : '–'}</td><td>${i ? fmt(t.down) : '–'}</td><td>${i ? fmt(t.withdrawn) : '–'}</td></tr>`;
   });
   $('timeline').innerHTML = `<thead><tr><th>Snapshot (your time)</th><th>Changed score</th><th>Went up</th><th>Went down</th><th>Withdrawn</th></tr></thead><tbody>${rows.join('')}</tbody>`;
 
