@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How much did the ICLR 2027 rebuttal move scores?</title>
+<meta name="description" content="How much did the ICLR 2027 rebuttal move review scores? Initial ratings from Nov 6 against live OpenReview data for about 40,000 papers.">
+<meta property="og:title" content="How much did the ICLR 2027 rebuttal move scores?">
+<meta property="og:description" content="How much did the rebuttal move scores? Look up your initial ratings and see how papers like yours moved.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://juevn.github.io/iclr2027-reviews/">
+<meta property="og:image" content="https://juevn.github.io/iclr2027-reviews/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How much did the ICLR 2027 rebuttal move scores?">
+<meta name="twitter:description" content="Type your initial ratings (like 3 3 2 2) and see how papers like yours moved during the rebuttal.">
+<meta name="twitter:image" content="https://juevn.github.io/iclr2027-reviews/assets/og-card.png">
+<meta name="twitter:creator" content="@jueun_kim_">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#7c3aed">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff; --panel: #f5f6f8; --panel-2: #eef0f4; --line: #e5e7eb; --ink: #111827; --muted: #6b7280; --faint: #9ca3af;
+  --up: #2563eb; --down: #dc2626; --wd: #6b7280; --same: #d9dce3; --accent: #4f46e5; --shadow: 0 10px 30px rgba(17,24,39,.08);
+  --grad: linear-gradient(92deg, #2563eb 0%, #7c3aed 50%, #ea580c 100%);
+  --heat-0: #eef4ff; --heat-1: #2563eb;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1020; --panel: #141b31; --panel-2: #1b2340; --line: #26304f; --ink: #eef2ff; --muted: #9aa6c7; --faint: #6f7a99;
+    --up: #6aa8ff; --down: #f87171; --wd: #9aa6c7; --same: #2b3556; --accent: #8b8cff; --shadow: 0 10px 30px rgba(0,0,0,.35);
+    --heat-0: #17213d; --heat-1: #6aa8ff;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1020; --panel: #141b31; --panel-2: #1b2340; --line: #26304f; --ink: #eef2ff; --muted: #9aa6c7; --faint: #6f7a99;
+  --up: #6aa8ff; --down: #f87171; --wd: #9aa6c7; --same: #2b3556; --accent: #8b8cff; --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --heat-0: #17213d; --heat-1: #6aa8ff;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Google Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+body { line-height: 1.45; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 64px; }
+
+.topbar { position: sticky; top: 0; z-index: 30; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar .in { max-width: 980px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 14px; }
+.brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 17px; white-space: nowrap; }
+.brand img { border-radius: 6px; }
+.brand .x { color: var(--muted); font-weight: 500; }
+.nav { display: flex; gap: 4px; margin-left: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.nav a { text-decoration: none; color: var(--muted); font-weight: 700; font-size: 14px; padding: 7px 12px; border-radius: 9px; white-space: nowrap; }
+.nav a:hover { color: var(--ink); background: var(--bg); }
+
+.hero { padding: 52px 0 4px; }
+.hero .kick { display: inline-block; font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--up); margin: 0 0 16px; }
+.hero .title { font-family: 'Google Sans Display', 'Google Sans', sans-serif; font-weight: 700; letter-spacing: -2px; line-height: 1.04; font-size: clamp(38px, 7.4vw, 72px); margin: 0; max-width: 860px; text-wrap: balance; }
+.hero p { color: var(--muted); font-size: clamp(16px, 2.2vw, 19px); margin: 18px 0 0; max-width: 620px; }
+.live { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 14px; color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 0 3px color-mix(in srgb, #16a34a 25%, transparent); }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 30px 0 0; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 16px 18px; }
+.stat b { display: block; font-size: clamp(26px, 4vw, 34px); letter-spacing: -1px; line-height: 1.1; }
+.stat span { color: var(--muted); font-size: 14px; }
+
+section { margin-top: 56px; scroll-margin-top: 70px; }
+h2.st { font-size: clamp(24px, 4vw, 32px); letter-spacing: -.6px; margin: 0 0 4px; }
+p.ss { color: var(--muted); margin: 0 0 16px; font-size: 16px; max-width: 720px; }
+
+/* lookup */
+.lookup { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 24px; }
+.inrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: stretch; }
+.inrow input { flex: 1 1 240px; min-width: 0; font: inherit; font-size: 22px; letter-spacing: 2px; padding: 14px 18px; border-radius: 16px; border: 2px solid var(--line); background: var(--bg); color: var(--ink); outline: none; }
+.inrow input:focus { border-color: var(--accent); }
+.btn { font: inherit; font-size: 16px; font-weight: 700; padding: 0 20px; min-height: 52px; border-radius: 14px; border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; }
+.hint { color: var(--faint); font-size: 14px; margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chipbtn { all: unset; cursor: pointer; font-size: 14px; padding: 5px 11px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--ink); letter-spacing: 1px; }
+.chipbtn:hover, .chipbtn:focus-visible { border-color: var(--accent); }
+.result { margin-top: 20px; display: none; }
+.result.show { display: block; }
+.result h3 { margin: 0; font-size: clamp(20px, 3.4vw, 26px); letter-spacing: -.3px; }
+.result .sub { color: var(--muted); font-size: 15px; margin-top: 2px; }
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+.metric { background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.metric b { display: block; font-size: 26px; letter-spacing: -.5px; }
+.metric span { color: var(--muted); font-size: 13.5px; }
+.metric.up b { color: var(--up); } .metric.down b { color: var(--down); }
+.metrics.ranks { grid-template-columns: repeat(2, 1fr); }
+.bar { display: flex; height: 16px; border-radius: 8px; overflow: hidden; margin-top: 16px; gap: 2px; background: var(--bg); }
+.bar div { height: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 13.5px; margin-top: 8px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.compare { margin-top: 16px; font-size: 15px; color: var(--muted); line-height: 1.6; }
+.compare b { color: var(--ink); }
+.note { margin-top: 10px; font-size: 13.5px; color: var(--faint); }
+
+/* charts */
+.chartcard { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 20px 20px 12px; position: relative; }
+.chartcard + .chartcard { margin-top: 16px; }
+.chartcard h4 { margin: 0 0 2px; font-size: 17px; }
+.chartcard .cap { color: var(--muted); font-size: 14px; margin: 0 0 6px; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+svg.chart text { font-family: inherit; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); font-size: 13px; line-height: 1.45; padding: 8px 11px; border-radius: 10px; opacity: 0; transition: opacity .1s; white-space: nowrap; z-index: 5; box-shadow: var(--shadow); }
+.tip.on { opacity: 1; }
+.tip b { font-weight: 700; }
+
+table.tl { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.tl th, table.tl td { text-align: right; padding: 10px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+table.tl th:first-child, table.tl td:first-child { text-align: left; }
+table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
+
+.method { color: var(--muted); font-size: 15px; line-height: 1.65; }
+.method li { margin-bottom: 6px; }
+.foot { margin-top: 48px; text-align: center; color: var(--muted); font-size: 14px; line-height: 1.8; }
+
+@media (max-width: 720px) {
+  .stats, .metrics { grid-template-columns: repeat(2, 1fr); }
+  .metrics.ranks { grid-template-columns: 1fr; }
+  .lookup { padding: 16px; border-radius: 20px; }
+  .chartcard { padding: 16px 14px 10px; border-radius: 20px; }
+  .inrow .btn { width: 100%; }
+  .nav a.hide-s { display: none; }
+  .brand .x { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="in">
+  <a class="brand" href="#top"><img src="assets/favicon.svg" alt="" width="22" height="22"><span>ICLR 2027</span><span class="x">Rebuttal tracker</span></a>
+  <nav class="nav">
+    <a href="#lookup">Your score</a>
+    <a href="#bymean">By score</a>
+    <a href="#reviews" class="hide-s">Reviews</a>
+  </nav>
+</div></div>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <div class="kick">ICLR 2027 · Rebuttal tracker</div>
+    <h1 class="title">How much did the rebuttal move scores?</h1>
+    <p>Every paper's ratings on Nov 6, when reviews came out, against live OpenReview data.</p>
+    <div class="live"><i></i><span id="updated"></span></div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <section id="lookup">
+    <h2 class="st">Look up your score</h2>
+    <p class="ss">Type the ratings your paper got on Nov 6, in any order. See how papers that started the same way have moved so far.</p>
+    <div class="lookup">
+      <form class="inrow" id="form" autocomplete="off">
+        <input id="q" inputmode="numeric" placeholder="e.g. 3 3 2 2" aria-label="Initial ratings, 1 to 4 each">
+        <button class="btn" type="submit">Look up</button>
+      </form>
+      <div class="hint" id="chips"><span>Try:</span></div>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section id="bymean">
+    <h2 class="st">By initial mean score</h2>
+    <p class="ss">Higher starting scores moved up more often. Papers near the bottom mostly withdrew instead.</p>
+    <div class="chartcard">
+      <h4>Share of papers whose score went up or down</h4>
+      <p class="cap">Papers still under review with the same number of reviews as on Nov 6. Means with fewer than 100 papers are not shown.</p>
+      <div class="legend"><span><i style="background:var(--up)"></i>Went up</span><span><i style="background:var(--down)"></i>Went down</span><span>Gray labels: mostly 4-review papers</span></div>
+      <svg class="chart" id="c-move" role="img" aria-label="Share of papers whose score went up or down, by initial mean"></svg>
+      <div class="tip" id="tip-move"></div>
+    </div>
+    <div class="chartcard">
+      <h4>Share of papers withdrawn since Nov 6</h4>
+      <p class="cap">All papers that had ratings on Nov 6.</p>
+      <svg class="chart" id="c-wd" role="img" aria-label="Share of papers withdrawn since Nov 6, by initial mean"></svg>
+      <div class="tip" id="tip-wd"></div>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <h2 class="st">Review by review</h2>
+    <p class="ss" id="rev-sub"></p>
+    <div class="chartcard">
+      <h4>Each review's rating on Nov 6 → now</h4>
+      <p class="cap">Counts of reviews. Off-diagonal cells are changes; the diagonal is reviews that kept their rating.</p>
+      <svg class="chart" id="c-heat" role="img" aria-label="Review rating transitions from Nov 6 to now"></svg>
+      <div class="tip" id="tip-heat"></div>
+    </div>
+  </section>
+
+  <section id="updates">
+    <h2 class="st">Updates</h2>
+    <p class="ss">Each row is one pass over all submissions. The discussion closes on <span id="ends"></span>, so expect late moves.</p>
+    <div class="chartcard" style="overflow-x:auto">
+      <table class="tl" id="timeline"></table>
+    </div>
+  </section>
+
+  <section id="method">
+    <h2 class="st">Data</h2>
+    <ul class="method">
+      <li><b>Nov 6 ratings</b> come from the snapshot by <a id="base-link" href="#">shiqiangw</a> (13:54 UTC). <b>Current ratings</b> come from the OpenReview API.</li>
+      <li><b>Score changes</b> count only papers still under review with the same number of reviews.</li>
+      <li><b>Review-level moves</b> are matched by edit time; <span id="inferred"></span> are inferred.</li>
+      <li>Only counts are published: no review text, reviewer ids or paper titles.</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    Made by <a href="https://juevn.github.io/">Jueun Kim</a> · <a href="https://x.com/jueun_kim_">@jueun_kim_</a><br>
+    Also: <a href="https://juevn.github.io/neurips2026/">NeurIPS 2026 Explorer</a>
+  </div>
+</main>
+
+<script src="data.js"></script>
+<script>
+(() => {
+  const D = window.ICLR_DATA;
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => n.toLocaleString('en-US');
+  const pct = (a, b, d = 1) => b ? (100 * a / b).toFixed(d) + '%' : '–';
+  const when = (iso) => new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs = {}, text) => { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+
+  // ---- aggregate combos
+  const combos = Object.entries(D.combos).map(([k, v]) => {
+    const r = k.split('').map(Number);
+    const mean = r.reduce((a, b) => a + b, 0) / r.length;
+    const [n, w, dk, sc, up, down, mixed] = v;
+    return { k, r, mean: Math.round(mean * 100) / 100, n, w, dk, sc, up, down, mixed };
+  });
+  const add = (list) => list.reduce((t, c) => { for (const f of ['n', 'w', 'dk', 'sc', 'up', 'down', 'mixed']) t[f] += c[f]; return t; }, { n: 0, w: 0, dk: 0, sc: 0, up: 0, down: 0, mixed: 0 });
+  const T = add(combos);
+  const moved = T.up + T.down + T.mixed;
+
+  $('updated').textContent = 'Updated ' + when(D.updated) + ' · discussion closes ' + new Date(D.discussionEnds + 'T12:00:00Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  $('ends').textContent = new Date(D.discussionEnds + 'T12:00:00Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  $('base-link').href = D.baseline.source; $('base-link').textContent = D.baseline.by;
+
+  $('stats').innerHTML = [
+    [pct(moved, T.sc), `of papers changed score (${fmt(moved)} of ${fmt(T.sc)})`],
+    [`${Math.round(T.up / Math.max(1, T.down))} : 1`, `went up vs. down (${fmt(T.up)} vs. ${fmt(T.down)})`],
+    [pct(T.w, T.n), `withdrawn since Nov 6 (${fmt(T.w)} papers)`],
+    [fmt(D.reviews.changed), `reviews changed rating, of ${fmt(D.reviews.analyzed)}`],
+  ].map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join('');
+
+  // ---- lookup
+  const byKey = Object.fromEntries(combos.map(c => [c.k, c]));
+  const means = combos.filter(c => c.n).map(c => [c.mean, c.n]);
+  const byN = (len, k) => combos.filter(c => c.r.length === len).sort((a, b) => b.n - a.n).slice(0, k).map(c => c.k);
+  const common = [...byN(3, 6), ...byN(4, 2)];
+  const chips = $('chips');
+  for (const k of common) { const b = document.createElement('button'); b.className = 'chipbtn'; b.type = 'button'; b.textContent = k.split('').join(' '); b.onclick = () => { $('q').value = b.textContent; show(k); }; chips.appendChild(b); }
+
+  function parse(s) {
+    const digits = (s.match(/[1-4]/g) || []).map(Number);
+    if (digits.length < 1 || digits.length > 7 || /[05-9]/.test(s)) return null;
+    return digits.sort((a, b) => b - a).join('');
+  }
+  function show(key) {
+    const box = $('result'); box.classList.add('show');
+    if (!key) { box.innerHTML = '<div class="sub">Type 1 to 7 ratings, each from 1 to 4. For example: 3 3 2 2.</div>'; return; }
+    const r = key.split('').map(Number);
+    const mean = Math.round(r.reduce((a, b) => a + b, 0) / r.length * 100) / 100;
+    const c = byKey[key];
+    const same = add(combos.filter(x => x.mean === mean));
+    const above = means.filter(([m]) => m >= mean).reduce((a, [, n]) => a + n, 0);
+    const label = r.join(' · ');
+    // rank of this mean among all papers on Nov 6, and among papers still under review now
+    const rankIn = (pairs, total) => {
+      const higher = pairs.filter(([m]) => m > mean + 1e-9).reduce((a, [, n]) => a + n, 0);
+      const tied = pairs.filter(([m]) => Math.abs(m - mean) < 1e-9).reduce((a, [, n]) => a + n, 0);
+      const top = 100 * (higher + Math.max(tied, 1)) / total;
+      return { rank: higher + 1, tied, total, top: top < 0.1 ? '<0.1' : top < 10 ? top.toFixed(1) : Math.round(top) };
+    };
+    const r6 = rankIn(means, T.n);
+    const nowPairs = Object.entries(D.currentMeans.h).map(([m, n]) => [+m, n]);
+    const rn = rankIn(nowPairs, D.currentMeans.n);
+    const rankHtml = `
+      <div class="metrics ranks">
+        <div class="metric"><b>#${fmt(r6.rank)} <span style="font-size:15px;color:var(--muted);font-weight:500">of ${fmt(r6.total)}</span></b><span>rank on Nov 6 · top ${r6.top}%${r6.tied > 1 ? ` · tied with ${fmt(r6.tied - 1)} others` : ''}</span></div>
+        <div class="metric"><b>#${fmt(rn.rank)} <span style="font-size:15px;color:var(--muted);font-weight:500">of ${fmt(rn.total)}</span></b><span>same mean, ranked now · top ${rn.top}%${rn.tied > 1 ? ` · tied with ${fmt(rn.tied - 1)} others` : ''}</span></div>
+      </div>
+      ${+rn.top > +r6.top ? `<div class="note">If your scores haven't changed, the same mean now ranks lower: other papers went up while the bottom withdrew.</div>` : ''}`;
+    if (!c || !c.n) {
+      box.innerHTML = `<h3>${label} <span style="color:var(--muted);font-weight:500">· mean ${mean.toFixed(2)}</span></h3><div class="sub">No paper had exactly these ratings on Nov 6.</div>` + rankHtml +
+        (same.sc ? `<div class="compare">Across all papers with mean <b>${mean.toFixed(2)}</b>: <b>${pct(same.up, same.sc)}</b> went up, <b>${pct(same.down, same.sc)}</b> went down.</div>` : '');
+      return;
+    }
+    const kept = c.sc - c.up - c.down - c.mixed;
+    const other = c.n - c.w - c.dk - c.sc; // still active but gained or lost a review
+    const seg = [[c.up, 'var(--up)', 'Went up'], [kept + c.mixed, 'var(--same)', 'Same score'], [c.down, 'var(--down)', 'Went down'], [c.w + c.dk, 'var(--wd)', 'Withdrawn or desk-rejected']];
+    const tot = seg.reduce((a, s) => a + s[0], 0);
+    box.innerHTML = `
+      <h3>${label} <span style="color:var(--muted);font-weight:500">· mean ${mean.toFixed(2)}</span></h3>
+      <div class="sub">${fmt(c.n)} paper${c.n === 1 ? '' : 's'} started with exactly these ratings.</div>
+      ${rankHtml}
+      <div class="metrics">
+        <div class="metric up"><b>${pct(c.up, c.sc)}</b><span>went up (${fmt(c.up)})</span></div>
+        <div class="metric down"><b>${pct(c.down, c.sc)}</b><span>went down (${fmt(c.down)})</span></div>
+        <div class="metric"><b>${pct(kept + c.mixed, c.sc)}</b><span>same score (${fmt(kept + c.mixed)})</span></div>
+        <div class="metric"><b>${pct(c.w + c.dk, c.n)}</b><span>withdrawn (${fmt(c.w + c.dk)})</span></div>
+      </div>
+      <div class="bar" role="img" aria-label="Breakdown">${seg.filter(s => s[0]).map(s => `<div title="${s[2]}: ${fmt(s[0])}" style="flex:${s[0]};background:${s[1]}"></div>`).join('')}</div>
+      <div class="legend">${seg.map(s => `<span><i style="background:${s[1]}"></i>${s[2]}</span>`).join('')}</div>
+      <div class="compare">Up, down and same are shares of the ${fmt(c.sc)} papers still under review with ${r.length} reviews. Withdrawn is a share of all ${fmt(c.n)}.
+        ${key.length && same.sc > c.sc ? `<br>All papers with mean <b>${mean.toFixed(2)}</b>, any combination: <b>${pct(same.up, same.sc)}</b> up, <b>${pct(same.down, same.sc)}</b> down.` : ''}</div>
+      ${c.sc < 30 ? '<div class="note">Few papers started like this, so these shares are noisy.</div>' : ''}
+      ${other > 0 ? `<div class="note">${fmt(other)} more gained or lost a review and are not counted in up/down.</div>` : ''}`;
+  }
+  $('form').addEventListener('submit', (e) => { e.preventDefault(); const k = parse($('q').value); show(k); if (k) history.replaceState(null, '', '#' + k); });
+  const fromHash = location.hash.replace('#', ''); if (/^[1-4]{1,7}$/.test(fromHash)) { const k = fromHash.split('').sort((a, b) => b - a).join(''); $('q').value = k.split('').join(' '); show(k); }
+
+  // ---- by-mean groups
+  const MIN = 100;
+  const meanKeys = [...new Set(combos.map(c => c.mean))].sort((a, b) => a - b);
+  const groups = [];
+  for (const m of meanKeys) {
+    if (m >= 3.2) continue;
+    const g = add(combos.filter(c => c.mean === m));
+    if (g.n >= MIN) groups.push({ label: m.toFixed(2), four: Math.round(m * 4) === m * 4 && Math.round(m * 3) !== m * 3 && m !== 2 && m !== 1, ...g });
+  }
+  const topG = add(combos.filter(c => c.mean >= 3.2)); groups.push({ label: '≥3.2', four: false, ...topG });
+
+  function tipper(svg, tip) {
+    return {
+      show(evt, html) {
+        tip.innerHTML = html; tip.classList.add('on');
+        const box = svg.parentElement.getBoundingClientRect(); const x = evt.clientX - box.left, y = evt.clientY - box.top;
+        const w = tip.offsetWidth; tip.style.left = Math.min(Math.max(8, x - w / 2), box.width - w - 8) + 'px'; tip.style.top = (y - tip.offsetHeight - 14) + 'px';
+      },
+      hide() { tip.classList.remove('on'); }
+    };
+  }
+
+  function barChart(svg, tipEl, rows, opts) {
+    svg.innerHTML = '';
+    const W = Math.max(280, Math.round(svg.getBoundingClientRect().width));
+    const tp = tipper(svg, tipEl);
+    const [lo, hi] = opts.domain;
+    if (W < 600) {
+      // narrow screens: horizontal bars, one row per mean
+      const rowH = 26, L = 46, R = 34, Tp = 22, H = Tp + rows.length * rowH + 6;
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
+      const x = (v) => L + (v - lo) / (hi - lo) * (W - L - R);
+      for (const t of opts.ticks) {
+        svg.appendChild(el('line', { x1: x(t), x2: x(t), y1: Tp - 4, y2: H - 4, stroke: css('--line'), 'stroke-width': 1 }));
+        svg.appendChild(el('text', { x: x(t), y: 12, 'text-anchor': 'middle', 'font-size': 11, fill: css('--muted') }, t === 0 ? '0' : Math.abs(t) + '%'));
+      }
+      rows.forEach((r, i) => {
+        const cy = Tp + i * rowH + rowH / 2, h = 15;
+        svg.appendChild(el('text', { x: L - 8, y: cy + 4, 'text-anchor': 'end', 'font-size': 12.5, fill: css(r.four ? '--faint' : '--muted') }, r.label));
+        for (const s of opts.series(r)) {
+          const x0 = x(0), x1 = x(s.sign * s.v), left = Math.min(x0, x1), w = Math.max(s.v ? 1.5 : 0, Math.abs(x1 - x0));
+          if (w) svg.appendChild(el('rect', { x: left, y: cy - h / 2, width: w, height: h, rx: 3, fill: s.color }));
+          if (s.label && (s.v || opts.zeroLabel)) svg.appendChild(el('text', { x: s.sign > 0 ? left + w + 5 : left - 4, y: cy + 4, 'text-anchor': s.sign > 0 ? 'start' : 'end', 'font-size': s.sign > 0 ? 12 : 10.5, 'font-weight': s.sign > 0 ? 700 : 400, fill: css(s.sign > 0 ? '--ink' : '--muted') }, s.v.toFixed(1)));
+        }
+        const hit = el('rect', { x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: 'transparent' });
+        hit.addEventListener('pointermove', (e) => tp.show(e, opts.tip(r))); hit.addEventListener('pointerleave', () => tp.hide());
+        svg.appendChild(hit);
+      });
+      svg.appendChild(el('line', { x1: x(0), x2: x(0), y1: Tp - 4, y2: H - 4, stroke: css('--faint'), 'stroke-width': 1 }));
+      return;
+    }
+    const H = opts.h, L = 44, R = 8, Tp = 26, B = 34;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
+    const y = (v) => Tp + (hi - v) / (hi - lo) * (H - Tp - B);
+    const bw = (W - L - R) / rows.length;
+    for (const t of opts.ticks) {
+      svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(t), y2: y(t), stroke: css('--line'), 'stroke-width': 1 }));
+      svg.appendChild(el('text', { x: L - 8, y: y(t) + 4, 'text-anchor': 'end', 'font-size': 12, fill: css('--muted') }, t === 0 ? '0' : Math.abs(t) + '%'));
+    }
+    rows.forEach((r, i) => {
+      const cx = L + bw * i + bw / 2, w = Math.min(44, bw * 0.66);
+      const g = el('g'); svg.appendChild(g);
+      for (const s of opts.series(r)) {
+        if (!s.v && !opts.zeroLabel) continue;
+        const y0 = y(0), y1 = y(s.sign * s.v), top = Math.min(y0, y1), h = s.v ? Math.max(1.5, Math.abs(y1 - y0)) : 0;
+        if (h) g.appendChild(el('rect', { x: cx - w / 2, y: s.sign > 0 ? top : y0, width: w, height: h, rx: 3, fill: s.color }));
+        if (s.label) g.appendChild(el('text', { x: cx, y: s.sign > 0 ? top - 6 : y0 + h + 13, 'text-anchor': 'middle', 'font-size': s.sign > 0 ? 12.5 : 11, 'font-weight': s.sign > 0 ? 700 : 400, fill: css(s.sign > 0 ? '--ink' : '--muted') }, s.v.toFixed(1)));
+      }
+      g.appendChild(el('text', { x: cx, y: H - 10, 'text-anchor': 'middle', 'font-size': 12.5, fill: css(r.four ? '--faint' : '--muted') }, r.label));
+      const hit = el('rect', { x: L + bw * i, y: Tp - 20, width: bw, height: H - Tp - B + 30, fill: 'transparent' });
+      hit.addEventListener('pointermove', (e) => tp.show(e, opts.tip(r)));
+      hit.addEventListener('pointerleave', () => tp.hide());
+      svg.appendChild(hit);
+    });
+    svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(0), y2: y(0), stroke: css('--faint'), 'stroke-width': 1 }));
+  }
+
+  function drawCharts() {
+    const maxUp = Math.max(...groups.map(g => 100 * g.up / g.sc));
+    const top = Math.ceil((maxUp + 2) / 4) * 4;
+    barChart($('c-move'), $('tip-move'), groups, {
+      h: 330, domain: [-4, top], ticks: [-4, 0, ...Array.from({ length: top / 4 }, (_, i) => (i + 1) * 4)].filter(t => innerWidth >= 600 || t % 8 === 0 || t === -4),
+      series: (g) => [{ v: 100 * g.up / g.sc, sign: 1, color: css('--up'), label: true }, { v: 100 * g.down / g.sc, sign: -1, color: css('--down'), label: true }],
+      tip: (g) => `<b>Mean ${g.label}</b>${g.four ? ' (mostly 4 reviews)' : ''}<br>Up ${fmt(g.up)} · ${pct(g.up, g.sc)}<br>Down ${fmt(g.down)} · ${pct(g.down, g.sc)}<br>Of ${fmt(g.sc)} papers`
+    });
+    const maxW = Math.max(...groups.map(g => 100 * g.w / g.n));
+    const topW = Math.ceil((maxW + 3) / 5) * 5;
+    barChart($('c-wd'), $('tip-wd'), groups, {
+      h: 280, domain: [0, topW], ticks: Array.from({ length: topW / 5 + 1 }, (_, i) => i * 5).filter((t, i, a) => innerWidth >= 600 || i % 2 === 0 || i === a.length - 1), zeroLabel: true,
+      series: (g) => [{ v: 100 * g.w / g.n, sign: 1, color: css('--wd'), label: true }],
+      tip: (g) => `<b>Mean ${g.label}</b><br>Withdrawn ${fmt(g.w)} of ${fmt(g.n)} · ${pct(g.w, g.n)}`
+    });
+    drawHeat();
+  }
+
+  // ---- review heatmap
+  const RV = D.reviews;
+  const moves = RV.moves;
+  const outOf = (a) => Object.entries(moves).filter(([k]) => k.startsWith(a + '>')).reduce((s, [, v]) => s + v, 0);
+  const top3 = Object.entries(moves).sort((a, b) => b[1] - a[1]);
+  $('rev-sub').innerHTML = `${fmt(RV.changed)} of ${fmt(RV.analyzed)} reviews (${pct(RV.changed, RV.analyzed)}) changed rating. ${top3[0][0].replace('>', '→')} alone is ${pct(top3[0][1], RV.changed, 0)} of all changes. ${fmt(RV.modified)} reviews were edited, but only ${pct(RV.changed, RV.modified, 0)} of those edits changed the rating.`;
+  $('inferred').textContent = `${pct(RV.inferred, RV.changed, 0)} of changed reviews`;
+  function drawHeat() {
+    const svg = $('c-heat'); svg.innerHTML = '';
+    const W = Math.max(280, Math.round(svg.getBoundingClientRect().width));
+    const narrow = W < 600, gap = 4, Tp = 52, rowLab = 64;
+    const cell = narrow ? Math.min(70, Math.floor((W - rowLab - 3 * gap) / 4)) : 70;
+    const gridW = 4 * cell + 3 * gap, sumW = 210;
+    const ox = narrow ? rowLab : Math.round((W - (rowLab + gridW + 56 + sumW)) / 2) + rowLab;
+    const H = narrow ? Tp + gridW + 96 : Tp + gridW + 24;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H);
+    const tp = tipper(svg, $('tip-heat'));
+    const maxOff = Math.max(...Object.values(moves));
+    svg.appendChild(el('text', { x: ox + gridW / 2, y: 18, 'text-anchor': 'middle', 'font-size': 13, fill: css('--muted') }, 'Rating now →'));
+    svg.appendChild(el('text', { x: ox - 12, y: Tp - 10, 'text-anchor': 'end', 'font-size': 13, fill: css('--muted') }, 'Nov 6 ↓'));
+    for (let j = 1; j <= 4; j++) svg.appendChild(el('text', { x: ox + (j - 1) * (cell + gap) + cell / 2, y: Tp - 10, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 700, fill: css('--ink') }, j));
+    for (let i = 1; i <= 4; i++) {
+      const yy = Tp + (i - 1) * (cell + gap);
+      svg.appendChild(el('text', { x: ox - 14, y: yy + cell / 2 + 5, 'text-anchor': 'end', 'font-size': 14, 'font-weight': 700, fill: css('--ink') }, i));
+      for (let j = 1; j <= 4; j++) {
+        const xx = ox + (j - 1) * (cell + gap);
+        const diag = i === j;
+        const v = diag ? RV.initial[i] - outOf(i) : (moves[i + '>' + j] || 0);
+        const t = diag ? 0 : Math.sqrt(v / maxOff);
+        const fill = diag ? css('--same') : (v ? `color-mix(in srgb, ${css('--heat-1')} ${Math.round(12 + 88 * t)}%, ${css('--heat-0')})` : css('--heat-0'));
+        svg.appendChild(el('rect', { x: xx, y: yy, width: cell, height: cell, rx: 8, fill }));
+        const strong = !diag && t > 0.55, darkMode = css('--bg').toLowerCase() !== '#ffffff';
+        svg.appendChild(el('text', { x: xx + cell / 2, y: yy + cell / 2 + 5, 'text-anchor': 'middle', 'font-size': diag ? 12 : 14, 'font-weight': diag ? 400 : 700, fill: strong ? (darkMode ? '#0b1020' : '#ffffff') : css(diag ? '--muted' : '--ink') }, v ? (diag && v >= 1000 ? (v / 1000).toFixed(1) + 'k' : fmt(v)) : '·'));
+        const hit = el('rect', { x: xx, y: yy, width: cell, height: cell, fill: 'transparent' });
+        const html = diag ? `<b>Kept ${i}</b><br>${fmt(v)} of ${fmt(RV.initial[i])} reviews` : `<b>${i} → ${j}</b><br>${fmt(v)} reviews<br>${pct(v, RV.initial[i], 2)} of all ${i}s · ${pct(v, RV.changed)} of changes`;
+        hit.addEventListener('pointermove', (e) => tp.show(e, html)); hit.addEventListener('pointerleave', () => tp.hide());
+        svg.appendChild(hit);
+      }
+    }
+    // side summary
+    const ups = Object.entries(moves).filter(([k]) => +k[2] > +k[0]).reduce((s, [, v]) => s + v, 0);
+    const lines = [[`${pct(ups, RV.changed, 0)}`, 'of changes were upward'], [fmt(moves['1>4'] || 0), 'reviews went 1 → 4'], [fmt(Object.entries(moves).filter(([k]) => Math.abs(+k[2] - +k[0]) >= 2).reduce((s, [, v]) => s + v, 0)), 'moved 2+ points']];
+    lines.forEach(([b, s], i) => {
+      const sx = narrow ? 4 + i * (W - 8) / 3 : ox + gridW + 56;
+      const sy = narrow ? Tp + gridW + 30 : Tp + 8 + i * 92;
+      svg.appendChild(el('text', { x: sx, y: sy + 22, 'font-size': narrow ? 22 : 30, 'font-weight': 700, fill: css('--ink') }, b));
+      const short = { 'of changes were upward': 'of changes up', 'reviews went 1 → 4': 'went 1 → 4', 'moved 2+ points': 'moved 2+ points' };
+      svg.appendChild(el('text', { x: sx, y: sy + (narrow ? 40 : 46), 'font-size': narrow ? 11.5 : 13.5, fill: css('--muted') }, narrow ? short[s] : s));
+    });
+  }
+
+  // ---- timeline
+  const rows = D.timeline.map((t, i) => {
+    const mv = t.up + t.down + t.mixed;
+    return `<tr><td>${when(t.at)}${i === 0 ? ' <span style="color:var(--faint)">(baseline)</span>' : ''}</td><td>${i ? pct(mv, t.sc) : '–'}</td><td>${i ? fmt(t.up) : '–'}</td><td>${i ? fmt(t.down) : '–'}</td><td>${i ? fmt(t.withdrawn) : '–'}</td></tr>`;
+  });
+  $('timeline').innerHTML = `<thead><tr><th>Snapshot (your time)</th><th>Changed score</th><th>Went up</th><th>Went down</th><th>Withdrawn</th></tr></thead><tbody>${rows.join('')}</tbody>`;
+
+  drawCharts();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawCharts);
+  let rz, lastW = innerWidth;
+  addEventListener('resize', () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(rz); rz = setTimeout(drawCharts, 120); });
+})();
+</script>
+</body>
+</html>
