@@ -40,7 +40,7 @@ How much did the ICLR 2027 rebuttal move review scores? Every paper's initial re
 - **Initial scores.** The snapshot taken right after reviews were released (Nov 6, 13:54 UTC), published at [shiqiangw.github.io/iclr-2027-scores](https://shiqiangw.github.io/iclr-2027-scores/) ([repo](https://github.com/shiqiangw/iclr-2027-scores)), about a day after reviews were released.
 - **Current ratings.** The OpenReview API: every ICLR 2027 submission with its official reviews.
 - **Score changes.** A paper's scores now against its initial scores. Only papers still under review with the same number of reviews are counted.
-- **Review-level moves.** Reviews not edited since the snapshot keep their initial rating, which pins down the rest. When several reviews on one paper were edited and more than one pairing fits, edits that kept the rating count as text-only and the rest are paired by smallest change. This applies to 2,469 of 16,032 changed reviews (15%, as of Nov 19); the rest are pinned down exactly.
+- **Review-level moves.** Reviews not edited since the snapshot keep their initial rating, which pins down the rest. When several reviews on one paper were edited and more than one pairing fits, edits that kept the rating count as text-only and the rest are paired by smallest change. This applies to 2,551 of 16,373 changed reviews (16%, as of Nov 19); the rest are pinned down exactly.
 - **Privacy.** Only counts are published. No review text, reviewer ids, paper titles or author names.
 
 Made by [Jueun Kim](https://juevn.github.io/) ([@jueun_kim_](https://x.com/jueun_kim_)). Also: [NeurIPS 2026 Explorer](https://juevn.github.io/neurips2026/).
