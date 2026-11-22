@@ -132,6 +132,8 @@ table.tl { width: 100%; border-collapse: collapse; font-size: 15px; }
 table.tl th, table.tl td { text-align: right; padding: 10px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
 table.tl th:first-child, table.tl td:first-child { text-align: left; }
 table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
+@media (max-width: 600px) { table.tl { font-size: 12.5px; } table.tl th, table.tl td { padding: 8px 3px; } table.tl th { font-size: 11px; } table.tl td:first-child { white-space: nowrap; } #timeline { letter-spacing: -0.2px; } }
+@media (max-width: 380px) { table.tl { font-size: 11.5px; } table.tl th { font-size: 10.5px; } }
 
 .method { color: var(--muted); font-size: 15px; line-height: 1.65; }
 .method li { margin-bottom: 6px; }
@@ -251,6 +253,7 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
   const fmt = (n) => n.toLocaleString('en-US');
   const pct = (a, b, d = 1) => b ? (100 * a / b).toFixed(d) + '%' : '–';
   const when = (iso) => new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' });
+  const whenShort = (iso) => new Date(iso).toLocaleString('en-US', { month: innerWidth < 600 ? 'numeric' : 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   const SVGNS = 'http://www.w3.org/2000/svg';
   const el = (tag, attrs = {}, text) => { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
@@ -332,11 +335,11 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
         <div class="metric up"><b>${pct(c.up, c.sc)}</b><span>went up (${fmt(c.up)})</span></div>
         <div class="metric down"><b>${pct(c.down, c.sc)}</b><span>went down (${fmt(c.down)})</span></div>
         <div class="metric"><b>${pct(kept + c.mixed, c.sc)}</b><span>same score (${fmt(kept + c.mixed)})</span></div>
-        <div class="metric"><b>${pct(c.w + c.dk, c.n)}</b><span>withdrawn (${fmt(c.w + c.dk)})</span></div>
+        <div class="metric"><b>${pct(c.w + c.dk, c.n)}</b><span>withdrawn or desk-rejected (${fmt(c.w + c.dk)})</span></div>
       </div>
       <div class="bar" role="img" aria-label="Breakdown">${seg.filter(s => s[0]).map(s => `<div title="${s[2]}: ${fmt(s[0])}" style="flex:${s[0]};background:${s[1]}"></div>`).join('')}</div>
       <div class="legend">${seg.map(s => `<span><i style="background:${s[1]}"></i>${s[2]}</span>`).join('')}</div>
-      <div class="compare">Up, down and same are shares of the ${fmt(c.sc)} papers still under review with ${r.length} reviews. Withdrawn is a share of all ${fmt(c.n)}.
+      <div class="compare">Up, down and same are shares of the ${fmt(c.sc)} papers still under review with ${r.length} reviews. Withdrawn or desk-rejected is a share of all ${fmt(c.n)}.
         ${key.length && same.sc > c.sc ? `<br>All papers with mean <b>${mean.toFixed(2)}</b>, any combination: <b>${pct(same.up, same.sc)}</b> up, <b>${pct(same.down, same.sc)}</b> down.` : ''}</div>
       ${c.sc < 30 ? '<div class="note">Few papers started like this, so these shares are noisy.</div>' : ''}
       ${other > 0 ? `<div class="note">${fmt(other)} more gained or lost a review and are not counted in up/down.</div>` : ''}
@@ -506,9 +509,9 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
   // ---- timeline
   const rows = D.timeline.map((t, i) => {
     const mv = t.up + t.down + t.mixed;
-    return `<tr><td>${i === 0 ? 'Initial scores' : when(t.at)}</td><td>${i ? pct(mv, t.sc) : '–'}</td><td>${i ? fmt(t.up) : '–'}</td><td>${i ? fmt(t.down) : '–'}</td><td>${i ? fmt(t.withdrawn) : '–'}</td></tr>`;
+    return `<tr><td>${i === 0 ? 'Initial' : whenShort(t.at)}</td><td>${i ? pct(mv, t.sc) : '–'}</td><td>${i ? fmt(t.up) : '–'}</td><td>${i ? fmt(t.down) : '–'}</td><td>${i ? fmt(t.withdrawn) : '–'}</td><td>${i && t.desk != null ? fmt(t.desk) : '–'}</td></tr>`;
   });
-  $('timeline').innerHTML = `<thead><tr><th>Snapshot (your time)</th><th>Changed score</th><th>Went up</th><th>Went down</th><th>Withdrawn</th></tr></thead><tbody>${rows.join('')}</tbody>`;
+  $('timeline').innerHTML = `<thead><tr><th>Snapshot (your time)</th><th>Changed score</th><th>Went up</th><th>Went down</th><th>With&shy;drawn</th><th>Desk-rejected</th></tr></thead><tbody>${rows.join('')}</tbody>`;
 
   drawCharts();
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawCharts);

@@ -33,7 +33,7 @@ How much did the ICLR 2027 rebuttal move review scores? Every paper's initial re
 | 6 | Ratings changed but the sum stayed the same |
 | 7 | Total change in rating sums |
 
-`currentMeans` counts papers still under review by their current mean rating, so a score can be ranked against today's field. `reviews` holds review-level moves (`"2>3"`: reviews that were initially 2 and are 3 now). `dest` lists, for each initial combination, the current scores of the papers that changed. `moveTimes` counts changed reviews per move by 3-hour UTC bucket of the review's last edit. `timeline` has one row per update.
+`currentMeans` counts papers still under review by their current mean rating, so a score can be ranked against today's field. `reviews` holds review-level moves (`"2>3"`: reviews that were initially 2 and are 3 now). `dest` lists, for each initial combination, the current scores of the papers that changed. `moveTimes` counts changed reviews per move by 3-hour UTC bucket of the review's last edit. `timeline` has one row per update (`desk` counts papers with initial scores that were later desk-rejected; tracked from Nov 16).
 
 ## How it was made
 

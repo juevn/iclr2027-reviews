@@ -62,14 +62,14 @@
 
       const combos = {}, moves = {}, initial = {}, dest = {}, times = {};
       const rv = { analyzed: 0, modified: 0, changed: 0, exact: 0, inferred: 0 };
-      const row = { sc: 0, up: 0, down: 0, mixed: 0, withdrawn: 0 };
+      const row = { sc: 0, up: 0, down: 0, mixed: 0, withdrawn: 0, desk: 0 };
       for (const [n, r0] of Object.entries(C.init)) {
         if (!r0.length) continue;
         const g = combos[r0.join('')] = combos[r0.join('')] || [0, 0, 0, 0, 0, 0, 0, 0];
         g[0]++;
         const c = C.cur[n]; if (!c) continue;
         if (c.s === 'w') { g[1]++; row.withdrawn++; continue; }
-        if (c.s === 'd') { g[2]++; continue; }
+        if (c.s === 'd') { g[2]++; row.desk++; continue; }
         const revs = c.revs.filter(x => x.v != null);
         const r1 = revs.map(x => x.v).sort((a, b) => b - a);
         if (r1.length !== r0.length) continue;

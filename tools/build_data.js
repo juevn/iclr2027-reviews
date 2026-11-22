@@ -5,7 +5,7 @@ const D = window.ICLR_DATA, U = JSON.parse(fs.readFileSync(process.argv[3], 'utf
 // sanity: combos totals must match the timeline row
 const t = [0,0,0,0,0,0,0,0]; for (const v of Object.values(U.combos)) v.forEach((x, i) => t[i] += x);
 const row = U.timelineRow;
-const ok = t[3] === row.sc && t[4] === row.up && t[5] === row.down && t[6] === row.mixed && t[1] === row.withdrawn
+const ok = t[3] === row.sc && t[4] === row.up && t[5] === row.down && t[6] === row.mixed && t[1] === row.withdrawn && (row.desk == null || t[2] === row.desk)
   && Object.values(U.reviews.moves).reduce((a, b) => a + b, 0) === U.reviews.changed && t[0] === 40458;
 if (!ok) { console.error('MISMATCH', t, row); process.exit(1); }
 // edit-time buckets must add up to each move
@@ -18,7 +18,8 @@ if (U.dest) for (const [k, v] of Object.entries(U.combos)) {
   const s = Object.values(U.dest[k] || {}).reduce((a, b) => a + b, 0);
   if (s !== v[4] + v[5] + v[6]) { console.error('DEST MISMATCH', k, s, v); process.exit(1); }
 }
-if (!D.timeline.some(r => r.at === row.at)) D.timeline.push({ at: row.at.replace(/\.\d+Z$/, 'Z'), sc: row.sc, up: row.up, down: row.down, mixed: row.mixed, withdrawn: row.withdrawn });
+const at = row.at.replace(/\.\d+Z$/, 'Z');
+if (!D.timeline.some(r => r.at === at)) D.timeline.push({ at, sc: row.sc, up: row.up, down: row.down, mixed: row.mixed, withdrawn: row.withdrawn, ...(row.desk != null ? { desk: row.desk } : {}) });
 D.updated = U.updated.replace(/\.\d+Z$/, 'Z'); D.combos = U.combos; D.currentMeans = U.currentMeans;
 const order = ['1>2','1>3','1>4','2>1','2>3','2>4','3>1','3>2','3>4','4>2','4>3'];
 const moves = Object.fromEntries(Object.entries(U.reviews.moves).sort((a, b) => b[1] - a[1]));
