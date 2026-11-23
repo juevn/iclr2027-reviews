@@ -6,6 +6,8 @@ window.ICLR_DATA = {
   scale: [1,4],
   baseline: {"at":"2026-11-06T13:54:47Z","source":"https://shiqiangw.github.io/iclr-2027-scores/","by":"shiqiangw"},
   updated: "2026-11-23T01:15:46Z",
+  // All submissions, incl. withdrawn and desk-rejected (the base acceptance rates use).
+  submissions: 42789,
   discussionEnds: "2026-11-18",
   decisions: "2026-12-16",
   combos: {

@@ -109,7 +109,7 @@
         h[m] = (h[m] || 0) + 1; nNow++;
       }
       const sorted = Object.fromEntries(Object.entries(h).sort((a, b) => +a[0] - +b[0]));
-      C.out = { updated: finished, combos, dest, currentMeans: { n: nNow, h: sorted }, reviews: { ...rv, initial, moves, times }, timelineRow: { at: finished, ...row } };
+      C.out = { updated: finished, submissions: Object.keys(C.cur).length, combos, dest, currentMeans: { n: nNow, h: sorted }, reviews: { ...rv, initial, moves, times }, timelineRow: { at: finished, ...row } };
       C.done = true;
     } catch (e) { C.progress.error = String(e); }
   })();

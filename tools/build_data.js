@@ -23,6 +23,7 @@ if (!D.timeline.some(r => r.at === at)) D.timeline.push({ at, sc: row.sc, up: ro
 D.updated = U.updated.replace(/\.\d+Z$/, 'Z'); D.combos = U.combos; D.currentMeans = U.currentMeans;
 const order = ['1>2','1>3','1>4','2>1','2>3','2>4','3>1','3>2','3>4','4>2','4>3'];
 const moves = Object.fromEntries(Object.entries(U.reviews.moves).sort((a, b) => b[1] - a[1]));
+if (U.submissions) D.submissions = U.submissions;
 D.reviews = { analyzed: U.reviews.analyzed, modified: U.reviews.modified, changed: U.reviews.changed, exact: U.reviews.exact, inferred: U.reviews.inferred, initial: U.reviews.initial, moves };
 const sortObj = (o, f) => Object.fromEntries(Object.entries(o).sort(f));
 if (U.dest) D.dest = sortObj(Object.fromEntries(Object.entries(U.dest).map(([k, v]) => [k, sortObj(v, (a, b) => b[1] - a[1])])), (a, b) => a[0] < b[0] ? 1 : -1);
@@ -40,7 +41,9 @@ window.ICLR_DATA = {
   scale: ${J(D.scale)},
   baseline: ${J(D.baseline)},
   updated: ${J(D.updated)},
-  discussionEnds: ${J(D.discussionEnds)},
+${D.submissions ? `  // All submissions, incl. withdrawn and desk-rejected (the base acceptance rates use).
+  submissions: ${D.submissions},
+` : ''}  discussionEnds: ${J(D.discussionEnds)},
   decisions: ${J(D.decisions)},
   combos: {
 ${comboLines.join(',\n')}

@@ -99,6 +99,8 @@ p.ss { color: var(--muted); margin: 0 0 16px; font-size: 16px; max-width: 720px;
 .metric.rank .rk b { display: inline; font-size: 32px; letter-spacing: -.8px; }
 .metric.rank.now .rk b { color: var(--down); }
 .metric.rank .num { font-size: 20px; font-weight: 700; color: var(--ink); }
+.metric.rank .allsub { margin-top: 10px; padding-top: 9px; border-top: 1px dashed var(--line); font-size: 13.5px; color: var(--muted); }
+.metric.rank .allsub b { display: inline; font-size: 13.5px; color: var(--ink); letter-spacing: 0; }
 .metric.rank .num small { font-size: 14px; color: var(--muted); font-weight: 500; }
 .bar { display: flex; height: 16px; border-radius: 8px; overflow: hidden; margin-top: 16px; gap: 2px; background: var(--bg); }
 .bar div { height: 100%; }
@@ -311,11 +313,13 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
     const r6 = rankIn(means, T.n);
     const nowPairs = Object.entries(D.currentMeans.h).map(([m, n]) => [+m, n]);
     const rn = rankIn(nowPairs, D.currentMeans.n);
+    const pa = D.submissions ? 100 * (rn.rank - 1 + Math.max(rn.tied, 1)) / D.submissions : 0;
+    const pctAll = pa < 10 ? pa.toFixed(1) : Math.round(pa);
     const rankHtml = `
       <div class="metrics ranks">
         <div class="metric rank"><div class="lbl">Initial rank</div><div class="rk"><b>Top ${r6.top}%</b><span class="num">#${fmt(r6.rank)} <small>of ${fmt(r6.total)}</small></span></div><span>${r6.tied > 1 ? `tied with ${fmt(r6.tied - 1)} others` : '&nbsp;'}</span></div>
         <div class="rk-arrow" aria-hidden="true">→</div>
-        <div class="metric rank${+rn.top > +r6.top ? ' now' : ''}"><div class="lbl">Same mean, ranked now</div><div class="rk"><b>Top ${rn.top}%</b><span class="num">#${fmt(rn.rank)} <small>of ${fmt(rn.total)}</small></span></div><span>${rn.tied > 1 ? `tied with ${fmt(rn.tied - 1)} others` : '&nbsp;'}</span></div>
+        <div class="metric rank${+rn.top > +r6.top ? ' now' : ''}"><div class="lbl">Same mean, ranked now</div><div class="rk"><b>Top ${rn.top}%</b><span class="num">#${fmt(rn.rank)} <small>of ${fmt(rn.total)}</small></span></div><span>${rn.tied > 1 ? `tied with ${fmt(rn.tied - 1)} others` : '&nbsp;'}</span>${D.submissions ? `<div class="allsub">Top <b>${pctAll}%</b> of all ${fmt(D.submissions)} submissions (incl. withdrawn), the base acceptance rates use</div>` : ''}</div>
       </div>
       ${+rn.top > +r6.top ? `<div class="note">If your scores haven't changed, the same mean now ranks lower: other papers went up while the bottom withdrew.</div>` : ''}`;
     if (!c || !c.n) {
