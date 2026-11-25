@@ -182,8 +182,8 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
   <div class="stats" id="stats"></div>
 
   <section id="lookup">
-    <h2 class="st">Look up your initial score</h2>
-    <p class="ss">Type your paper's initial scores, in any order. See how papers that started the same way have moved so far.</p>
+    <h2 class="st">Look up your scores</h2>
+    <p class="ss">Type your initial scores to see how papers that started the same way have moved. Or type your current scores to see where that mean ranks now.</p>
     <div class="lookup">
       <form class="inrow" id="form" autocomplete="off">
         <input id="q" inputmode="numeric" placeholder="Initial scores, e.g. 3 3 2 2" aria-label="Initial scores, 1 to 4 each">
@@ -319,7 +319,7 @@ table.tl th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
       <div class="metrics ranks">
         <div class="metric rank"><div class="lbl">Initial rank</div><div class="rk"><b>Top ${r6.top}%</b><span class="num">#${fmt(r6.rank)} <small>of ${fmt(r6.total)}</small></span></div><span>${r6.tied > 1 ? `tied with ${fmt(r6.tied - 1)} others` : '&nbsp;'}</span></div>
         <div class="rk-arrow" aria-hidden="true">→</div>
-        <div class="metric rank${+rn.top > +r6.top ? ' now' : ''}"><div class="lbl">Same mean, ranked now</div><div class="rk"><b>Top ${rn.top}%</b><span class="num">#${fmt(rn.rank)} <small>of ${fmt(rn.total)}</small></span></div><span>${rn.tied > 1 ? `tied with ${fmt(rn.tied - 1)} others` : '&nbsp;'}</span>${D.submissions ? `<div class="allsub">Top <b>${pctAll}%</b> of all ${fmt(D.submissions)} submissions (incl. withdrawn), the base acceptance rates use</div>` : ''}</div>
+        <div class="metric rank${+rn.top > +r6.top ? ' now' : ''}"><div class="lbl">This mean, ranked now</div><div class="rk"><b>Top ${rn.top}%</b><span class="num">#${fmt(rn.rank)} <small>of ${fmt(rn.total)}</small></span></div><span>${rn.tied > 1 ? `tied with ${fmt(rn.tied - 1)} others` : '&nbsp;'}</span>${D.submissions ? `<div class="allsub">Top <b>${pctAll}%</b> of all ${fmt(D.submissions)} submissions (incl. withdrawn), the base acceptance rates use</div>` : ''}</div>
       </div>
       ${+rn.top > +r6.top ? `<div class="note">If your scores haven't changed, the same mean now ranks lower: other papers went up while the bottom withdrew.</div>` : ''}`;
     if (!c || !c.n) {
